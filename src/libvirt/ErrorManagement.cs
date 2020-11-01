@@ -9,7 +9,9 @@ namespace libvirt
 
         public static void ThrowExceptionOnError(IntPtr result) => ThrowExceptionOn(() => result == IntPtr.Zero);
 
-        public static void ThrowExceptionOn(Func<bool> predicate)
+        public static void ThrowExceptionOnError(string result) => ThrowExceptionOn(() => result == null);
+
+        private static void ThrowExceptionOn(Func<bool> predicate)
         {
             if (predicate())
             {

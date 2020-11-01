@@ -57,6 +57,26 @@ namespace libvirt
             IsOpen = false;
         }
 
+        public string Capabilities => GetString(() => Libvirt.virConnectGetCapabilities(_conn));
+
+        public string Hostname => GetString(() => Libvirt.virConnectGetHostname(_conn));
+
+        public string Type => GetString(() => Libvirt.virConnectGetType(_conn));
+
+        private string GetString(Func<string> func)
+        {
+            if (!IsOpen)
+            {
+                return null;
+            }
+
+            string result = func();
+
+            ThrowExceptionOnError(result);
+
+            return result;
+        }
+
         protected override void DisposeInternal()
         {
             Close(ignoreErrors: true);

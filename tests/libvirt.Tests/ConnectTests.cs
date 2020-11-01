@@ -15,6 +15,11 @@ namespace libvirt.Tests
             _conn = new Connect(URI_VALID);
         }
 
+        ~ConnectTests()
+        {
+            _conn.Close();
+        }
+
         [Fact]
         public void Connect_InitialState()
         {
@@ -56,7 +61,7 @@ namespace libvirt.Tests
         public void Close_ClosesConnection(bool readOnly)
         {
             // Arrange
-            _conn.Open();
+            _conn.Open(readOnly);
 
             // Act
             _conn.Close();
@@ -112,6 +117,35 @@ namespace libvirt.Tests
             } // Implicit Dispose()
             
             Assert.False(conn.IsOpen);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void TestProperties(bool openAsReadOnly) 
+        {
+            TestStringProperty(openAsReadOnly,
+                x => x.Hostname,
+                x => x.Capabilities,
+                x => x.Type
+            );
+        }
+
+        private void TestStringProperty(bool openAsReadonly, params Func<Connect, string>[] funcs)
+        {
+            // Property is null if the connection is closed
+            foreach (var func in funcs)
+            {
+                Assert.Null(func(_conn));
+            }
+
+            // Property is not null if the connection is closed
+            _conn.Open(openAsReadonly);
+            foreach (var func in funcs)
+            {
+                string value = func(_conn);
+                Assert.NotNull(value);
+            }
         }
     }
 }
