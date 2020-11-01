@@ -22,32 +22,38 @@ namespace libvirt.Tests
             Assert.False(_conn.IsOpen);
         }
 
-        [Fact]
-        public void Open_OpensConnection()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void Open_OpensConnection(bool readOnly)
         {
             // Act
-            _conn.Open();
+            _conn.Open(readOnly);
 
             // Assert
             Assert.True(_conn.IsOpen);
         }
 
-        [Fact]
-        public void Open_ThrowsExceptionIfUriIsInvalid()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void Open_ThrowsExceptionIfUriIsInvalid(bool readOnly)
         {
             // Arrange
             Connect conn = new Connect(URI_INVALID);
             
             // Act
-            Action action = () => conn.Open();
+            Action action = () => conn.Open(readOnly);
 
             // Assert
             Assert.Throws<LibvirtException>(action);
             Assert.False(conn.IsOpen);
         }
 
-        [Fact]
-        public void Close_ClosesConnection()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void Close_ClosesConnection(bool readOnly)
         {
             // Arrange
             _conn.Open();
@@ -69,11 +75,13 @@ namespace libvirt.Tests
             Assert.False(_conn.IsOpen);
         }
 
-        [Fact]
-        public void Dispose_ClosesConnection()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void Dispose_ClosesConnection(bool readOnly)
         {
             // Arrange
-            _conn.Open();
+            _conn.Open(readOnly);
 
             // Act
             _conn.Dispose();
@@ -92,13 +100,15 @@ namespace libvirt.Tests
             Assert.False(_conn.IsOpen);
         }
 
-        [Fact]
-        public void ImplicitDispose_ClosesConnection()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ImplicitDispose_ClosesConnection(bool readOnly)
         {
             Connect conn = null;
             using (conn = new Connect(URI_VALID))
             {
-                conn.Open();
+                conn.Open(readOnly);
             } // Implicit Dispose()
             
             Assert.False(conn.IsOpen);

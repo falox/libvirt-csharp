@@ -35,6 +35,9 @@ namespace libvirt
         [DllImport(Libvirt.Name, CallingConvention = CallingConvention.Cdecl, EntryPoint = "virConnectOpen")]
         public static extern IntPtr virConnectOpen(string name);
 
+        [DllImport(Libvirt.Name, CallingConvention = CallingConvention.Cdecl, EntryPoint = "virConnectOpenReadOnly")]
+        public static extern IntPtr virConnectOpenReadOnly(string name);
+
         [DllImport(Libvirt.Name, CallingConvention = CallingConvention.Cdecl, EntryPoint="virConnectClose")]
         public static extern int virConnectClose(IntPtr conn);
 

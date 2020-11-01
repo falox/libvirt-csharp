@@ -19,14 +19,21 @@ namespace libvirt
 
         public bool IsOpen { get; set; }
 
-        public void Open()
+        public void Open(bool readOnly = false)
         {
             if (IsDisposed)
             {
                 throw new ObjectDisposedException("Cannot open a disposed Connect");
             }
 
-            _conn = Libvirt.virConnectOpen(Uri);
+            if (readOnly)
+            {
+                _conn = Libvirt.virConnectOpenReadOnly(Uri);
+            }
+            else
+            {
+                _conn = Libvirt.virConnectOpen(Uri);
+            }
 
             ThrowExceptionOnError(_conn);
 
