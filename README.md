@@ -9,15 +9,14 @@ The [official C# bindings](https://libvirt.org/csharp.html) of the libvirt API a
 
 ## Compiling the source code
 
-```
-https://github.com/falox/libvirt-csharp.git
+```bash
+git clone https://github.com/falox/libvirt-csharp.git
 cd libvirt-csharp
 dotnet build
 ```
 
-## Running the tests
+You cannot run `dotnet run`, since there are no sample clients yet. You can find some examples in the `tests` directory, and you can run them with:
 
-```
+```bash
 dotnet test
 ```
-
