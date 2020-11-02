@@ -1,12 +1,14 @@
 ﻿using System;
-using static libvirt.ErrorManagement;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace libvirt
 {
     /// <summary>
     /// Represents a Connect object
     /// </summary>
-    public class Connect : Disposable
+    public class Connect : LibvirtObject
     {
         private IntPtr _conn;
 
@@ -57,13 +59,31 @@ namespace libvirt
             IsOpen = false;
         }
 
+        public IEnumerable<Domain> GetDomains(virConnectListAllDomainsFlags flags = default(virConnectListAllDomainsFlags))
+        {
+            int result = Libvirt.virConnectListAllDomains(_conn, out IntPtr[] ptrDomains, flags);
+
+            ThrowExceptionOnError(result);
+
+            if (result == 0)
+            {
+                return new Domain[0];
+            }
+            else
+            {
+                return ptrDomains
+                    .Select(x => new Domain(_conn, x))
+                    .ToList();
+            }
+        }
+
         public string Capabilities => GetString(() => Libvirt.virConnectGetCapabilities(_conn));
 
         public string Hostname => GetString(() => Libvirt.virConnectGetHostname(_conn));
 
         public string Type => GetString(() => Libvirt.virConnectGetType(_conn));
 
-        private string GetString(Func<string> func)
+        private new string GetString(Func<string> func)
         {
             if (!IsOpen)
             {

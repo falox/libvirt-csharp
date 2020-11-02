@@ -5,9 +5,9 @@ namespace libvirt
     [Serializable]
     public class LibvirtException : Exception
     {
-        public Error Error { get; }
+        public virError Error { get; }
 
-        public LibvirtException(Error error) : base(error.Message)
+        public LibvirtException(virError error) : base(error.Message)
         {
             this.Error = error;
         }

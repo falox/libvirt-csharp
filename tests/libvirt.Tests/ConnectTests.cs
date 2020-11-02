@@ -1,6 +1,7 @@
 using System;
 using Xunit;
 using libvirt;
+using System.Linq;
 
 namespace libvirt.Tests
 {
@@ -122,7 +123,24 @@ namespace libvirt.Tests
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void TestProperties(bool openAsReadOnly) 
+        public void GetDomains_ReturnsDomains(bool readOnly)
+        {
+            // Arrange
+            _conn.Open(readOnly);
+
+            // Act
+            var domains = _conn.GetDomains();
+
+            // Assert
+            Assert.Equal(1, domains.Count());
+            Assert.Equal(1, domains.First().Id);
+            Assert.Equal("test", domains.First().Name);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void TestConnectProperties(bool openAsReadOnly) 
         {
             TestStringProperty(openAsReadOnly,
                 x => x.Hostname,

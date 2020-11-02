@@ -3,7 +3,7 @@ namespace libvirt
     ///<summary>
     /// Enumerate errors
     ///</summary>
-    public enum ErrorNumber
+    public enum virErrorNumber
     {
         /// <summary>
         /// No error

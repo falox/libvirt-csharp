@@ -32,6 +32,8 @@ namespace libvirt
             return handle;
         }
 
+        #region Connect
+
         [DllImport(Libvirt.Name, CallingConvention = CallingConvention.Cdecl, EntryPoint = "virConnectOpen")]
         public static extern IntPtr virConnectOpen(string name);
 
@@ -52,9 +54,32 @@ namespace libvirt
         [DllImport(Libvirt.Name, CallingConvention = CallingConvention.Cdecl, EntryPoint = "virConnectGetType")]
         [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(StaticStringMarshaler))]
         public static extern string virConnectGetType(IntPtr conn);
+        
+        [DllImport(Libvirt.Name, CallingConvention = CallingConvention.Cdecl, EntryPoint = "virConnectListAllDomains")]
+        public static extern int virConnectListAllDomains(IntPtr conn, out IntPtr[] domains, virConnectListAllDomainsFlags flags);
+
+        #endregion
+
+        #region Domain
+
+        [DllImport(Libvirt.Name, CallingConvention = CallingConvention.Cdecl, EntryPoint = "virDomainGetID")]
+        public static extern int virDomainGetID(IntPtr domain);
+
+        [DllImport(Libvirt.Name, CallingConvention = CallingConvention.Cdecl, EntryPoint = "virDomainGetName")]
+        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(StaticStringMarshaler))]
+        public static extern string virDomainGetName(IntPtr domain);
+
+        [DllImport(Libvirt.Name, CallingConvention = CallingConvention.Cdecl, EntryPoint = "virDomainFree")]
+        public static extern int virDomainFree(IntPtr domain);
+
+        #endregion
+
+        #region Error
 
         [DllImport(Libvirt.Name, CallingConvention = CallingConvention.Cdecl, EntryPoint = "virGetLastError")]
-        public static extern IntPtr virGetLastError();    
+        public static extern IntPtr virGetLastError();
+
+        #endregion
     }
 
     /// <summary>

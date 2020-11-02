@@ -3,17 +3,14 @@ using System.Runtime.InteropServices;
 
 namespace libvirt
 {
-    /// <summary>
-    /// the virError object
-    /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    public class Error
+    public class virError
     {
         /// <summary>
         /// The error code, a virErrorNumber.
         /// </summary>
         [MarshalAs(UnmanagedType.I4)]
-        public ErrorNumber code;
+        public virErrorNumber code;
         /// <summary>
         /// What part of the library raised this error.
         /// </summary>
@@ -35,7 +32,7 @@ namespace libvirt
         /// How consequent is the error.
         /// </summary>
         [MarshalAs(UnmanagedType.I4)]
-        public ErrorLevel level;
+        public virErrorLevel level;
         /// <summary>
         /// Connection if available, deprecated see note above.
         /// </summary>
