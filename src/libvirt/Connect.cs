@@ -77,6 +77,15 @@ namespace libvirt
             }
         }
 
+        public Domain CreateDomain(string xml)
+        {
+            IntPtr result = Libvirt.virDomainCreateXML(_conn, xml);
+
+            ThrowExceptionOnError(result);
+
+            return new Domain(_conn, result);
+        }
+
         public string Capabilities => GetString(() => Libvirt.virConnectGetCapabilities(_conn));
 
         public string Hostname => GetString(() => Libvirt.virConnectGetHostname(_conn));

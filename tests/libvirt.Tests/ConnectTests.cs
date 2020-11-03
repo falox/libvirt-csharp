@@ -150,6 +150,35 @@ namespace libvirt.Tests
             Assert.Empty(domains);
         }
 
+        [Fact]
+        public void CreateDomain_CreatesAndRunsDomain()
+        {
+            // Arrange
+            _conn.Open();
+            var activeDomain = _conn.GetDomains().First();
+            var xml = activeDomain.Xml;
+            activeDomain.Destroy();
+
+            // Act
+            var domain = _conn.CreateDomain(xml);
+
+            // Assert
+            Assert.Equal(2, domain.Id);
+        }
+
+        [Fact]
+        public void CreateDomain_ThrowsExceptionWithInvalidXML()
+        {
+            // Arrange
+            _conn.Open();
+
+            // Act
+            Action action = () => _conn.CreateDomain("<domain />");
+
+            // Assert
+            Assert.Throws<LibvirtException>(action);
+        }
+
         [Theory]
         [InlineData(true)]
         [InlineData(false)]

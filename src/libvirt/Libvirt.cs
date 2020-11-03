@@ -78,6 +78,16 @@ namespace libvirt
         [return: MarshalAs(UnmanagedType.LPStr)]
         public static extern string virDomainGetOSType(IntPtr domain);
 
+        [DllImport(Libvirt.Name, CallingConvention = CallingConvention.Cdecl, EntryPoint = "virDomainGetXMLDesc")]
+        [return: MarshalAs(UnmanagedType.LPStr)]
+        public static extern string virDomainGetXMLDesc(IntPtr domain, int flags = 0);
+
+        [DllImport(Libvirt.Name, CallingConvention = CallingConvention.Cdecl, EntryPoint = "virDomainCreateXML")]
+        public static extern IntPtr virDomainCreateXML(IntPtr conn, string xmlDesc, uint flags = 0);
+
+        [DllImport(Libvirt.Name, CallingConvention = CallingConvention.Cdecl, EntryPoint = "virDomainDestroy")]
+        public static extern int virDomainDestroy(IntPtr domain);
+
         [DllImport(Libvirt.Name, CallingConvention = CallingConvention.Cdecl, EntryPoint = "virDomainFree")]
         public static extern int virDomainFree(IntPtr domain);
 

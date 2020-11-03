@@ -26,6 +26,11 @@ namespace libvirt
             _ptrDomain = ptrDomain;
         }
 
+        public void Destroy()
+        {
+            ThrowExceptionOnError(Libvirt.virDomainDestroy(_ptrDomain));
+        }
+
         public int Id => GetInt32(() => Libvirt.virDomainGetID(_ptrDomain));
 
         public string Name => GetString(() => Libvirt.virDomainGetName(_ptrDomain));
@@ -33,6 +38,8 @@ namespace libvirt
         public string UUID => GetUUID(uuid => Libvirt.virDomainGetUUIDString(_ptrDomain, uuid));
 
         public string OSType => GetString(() => Libvirt.virDomainGetOSType(_ptrDomain));
+
+        public string Xml => GetString(() => Libvirt.virDomainGetXMLDesc(_ptrDomain));
 
         protected override void DisposeInternal()
         {
