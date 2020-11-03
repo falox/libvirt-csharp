@@ -22,6 +22,22 @@ namespace libvirt
             return result;
         }
 
+        protected string GetUUID(Func<char[], int> func)
+        {
+            if (IsDisposed || IsDisposing)
+            {
+                throw new ObjectDisposedException(this.GetType().Name);
+            }
+            
+            char[] uuid = new char[Libvirt.VIR_UUID_BUFLEN];
+            
+            var result = func(uuid);
+
+            ThrowExceptionOnError(result);
+
+            return new string(uuid);
+        }
+
         protected int GetInt32(Func<int> func)
         {
             if (IsDisposed || IsDisposing)

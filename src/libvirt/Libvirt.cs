@@ -32,6 +32,8 @@ namespace libvirt
             return handle;
         }
 
+        public const int VIR_UUID_BUFLEN = 36;
+
         #region Connect
 
         [DllImport(Libvirt.Name, CallingConvention = CallingConvention.Cdecl, EntryPoint = "virConnectOpen")]
@@ -68,6 +70,13 @@ namespace libvirt
         [DllImport(Libvirt.Name, CallingConvention = CallingConvention.Cdecl, EntryPoint = "virDomainGetName")]
         [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(StaticStringMarshaler))]
         public static extern string virDomainGetName(IntPtr domain);
+
+        [DllImport(Libvirt.Name, CallingConvention = CallingConvention.Cdecl, EntryPoint = "virDomainGetUUIDString")]
+        public static extern int virDomainGetUUIDString(IntPtr domain, [Out] char[] uuid);
+
+        [DllImport(Libvirt.Name, CallingConvention = CallingConvention.Cdecl, EntryPoint = "virDomainGetOSType")]
+        [return: MarshalAs(UnmanagedType.LPStr)]
+        public static extern string virDomainGetOSType(IntPtr domain);
 
         [DllImport(Libvirt.Name, CallingConvention = CallingConvention.Cdecl, EntryPoint = "virDomainFree")]
         public static extern int virDomainFree(IntPtr domain);

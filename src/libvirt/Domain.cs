@@ -30,6 +30,10 @@ namespace libvirt
 
         public string Name => GetString(() => Libvirt.virDomainGetName(_ptrDomain));
 
+        public string UUID => GetUUID(uuid => Libvirt.virDomainGetUUIDString(_ptrDomain, uuid));
+
+        public string OSType => GetString(() => Libvirt.virDomainGetOSType(_ptrDomain));
+
         protected override void DisposeInternal()
         {
             Libvirt.virDomainFree(_ptrDomain);

@@ -132,9 +132,22 @@ namespace libvirt.Tests
             var domains = _conn.GetDomains();
 
             // Assert
-            Assert.Equal(1, domains.Count());
-            Assert.Equal(1, domains.First().Id);
-            Assert.Equal("test", domains.First().Name);
+            Assert.NotEmpty(domains);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void GetDomains_ReturnsEmptyListIfNoDomainsAreFound(bool readOnly)
+        {
+            // Arrange
+            _conn.Open(readOnly);
+
+            // Act
+            var domains = _conn.GetDomains(virConnectListAllDomainsFlags.VIR_CONNECT_LIST_DOMAINS_INACTIVE);
+
+            // Assert
+            Assert.Empty(domains);
         }
 
         [Theory]

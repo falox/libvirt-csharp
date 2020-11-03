@@ -59,7 +59,7 @@ namespace libvirt
             IsOpen = false;
         }
 
-        public IEnumerable<Domain> GetDomains(virConnectListAllDomainsFlags flags = default(virConnectListAllDomainsFlags))
+        public List<Domain> GetDomains(virConnectListAllDomainsFlags flags = default(virConnectListAllDomainsFlags))
         {
             int result = Libvirt.virConnectListAllDomains(_conn, out IntPtr[] ptrDomains, flags);
 
@@ -67,7 +67,7 @@ namespace libvirt
 
             if (result == 0)
             {
-                return new Domain[0];
+                return new List<Domain>();
             }
             else
             {
