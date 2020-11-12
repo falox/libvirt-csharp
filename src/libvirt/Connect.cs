@@ -61,20 +61,21 @@ namespace libvirt
 
         public List<Domain> GetDomains(virConnectListAllDomainsFlags flags = default(virConnectListAllDomainsFlags))
         {
-            int result = Libvirt.virConnectListAllDomains(_conn, out IntPtr[] ptrDomains, flags);
+            int result = Libvirt.virConnectListAllDomains(_conn, out IntPtr ptrDomains, flags);
 
             ThrowExceptionOnError(result);
 
-            if (result == 0)
+            List<Domain> domains = new List<Domain>();
+
+            for (int i = 0; i < result; i++)
             {
-                return new List<Domain>();
+                IntPtr ptrDomain = Marshal.ReadIntPtr(ptrDomains, i * IntPtr.Size);
+                domains.Add(new Domain(_conn, ptrDomain));
             }
-            else
-            {
-                return ptrDomains
-                    .Select(x => new Domain(_conn, x))
-                    .ToList();
-            }
+
+            Marshal.FreeHGlobal(ptrDomains);
+
+            return domains;
         }
 
         public Domain CreateDomain(string xml)
@@ -85,6 +86,8 @@ namespace libvirt
 
             return new Domain(_conn, result);
         }
+
+        public void RestoreDomain(string file) => ThrowExceptionOnError(Libvirt.virDomainRestore(_conn, file));
 
         public string Capabilities => GetString(() => Libvirt.virConnectGetCapabilities(_conn));
 

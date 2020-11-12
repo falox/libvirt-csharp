@@ -58,7 +58,7 @@ namespace libvirt
         public static extern string virConnectGetType(IntPtr conn);
         
         [DllImport(Libvirt.Name, CallingConvention = CallingConvention.Cdecl, EntryPoint = "virConnectListAllDomains")]
-        public static extern int virConnectListAllDomains(IntPtr conn, out IntPtr[] domains, virConnectListAllDomainsFlags flags);
+        public static extern int virConnectListAllDomains(IntPtr conn, [Out] out IntPtr domains, virConnectListAllDomainsFlags flags);
 
         #endregion
 
@@ -78,6 +78,9 @@ namespace libvirt
         [return: MarshalAs(UnmanagedType.LPStr)]
         public static extern string virDomainGetOSType(IntPtr domain);
 
+        [DllImport(Libvirt.Name, CallingConvention = CallingConvention.Cdecl, EntryPoint = "virDomainGetInfo")]
+        public static extern int virDomainGetInfo(IntPtr domain, [Out] virDomainInfo info);
+
         [DllImport(Libvirt.Name, CallingConvention = CallingConvention.Cdecl, EntryPoint = "virDomainGetXMLDesc")]
         [return: MarshalAs(UnmanagedType.LPStr)]
         public static extern string virDomainGetXMLDesc(IntPtr domain, int flags = 0);
@@ -90,6 +93,24 @@ namespace libvirt
 
         [DllImport(Libvirt.Name, CallingConvention = CallingConvention.Cdecl, EntryPoint = "virDomainFree")]
         public static extern int virDomainFree(IntPtr domain);
+
+        [DllImport(Libvirt.Name, CallingConvention = CallingConvention.Cdecl, EntryPoint = "virDomainShutdown")]
+        public static extern int virDomainShutdown(IntPtr domain);
+
+        [DllImport(Libvirt.Name, CallingConvention = CallingConvention.Cdecl, EntryPoint = "virDomainSuspend")]
+        public static extern int virDomainSuspend(IntPtr domain);
+
+        [DllImport(Libvirt.Name, CallingConvention = CallingConvention.Cdecl, EntryPoint = "virDomainResume")]
+        public static extern int virDomainResume(IntPtr domain);        
+
+        [DllImport(Libvirt.Name, CallingConvention = CallingConvention.Cdecl, EntryPoint = "virDomainReboot")]
+        public static extern int virDomainReboot(IntPtr domain, uint flags = 0);
+
+        [DllImport(Libvirt.Name, CallingConvention = CallingConvention.Cdecl, EntryPoint = "virDomainSave")]
+        public static extern int virDomainSave(IntPtr domain, string to);
+
+        [DllImport(Libvirt.Name, CallingConvention = CallingConvention.Cdecl, EntryPoint = "virDomainRestore")]
+        public static extern int virDomainRestore(IntPtr conn, string from);
 
         #endregion
 

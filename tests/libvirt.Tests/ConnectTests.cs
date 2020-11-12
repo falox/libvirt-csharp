@@ -2,6 +2,8 @@ using System;
 using Xunit;
 using libvirt;
 using System.Linq;
+using System.Xml.Linq;
+using System.IO;
 
 namespace libvirt.Tests
 {
@@ -155,15 +157,43 @@ namespace libvirt.Tests
         {
             // Arrange
             _conn.Open();
-            var activeDomain = _conn.GetDomains().First();
-            var xml = activeDomain.Xml;
-            activeDomain.Destroy();
+            var xml = XDocument.Parse(_conn.GetDomains().Single(x => x.Id == 1).Xml);
+            xml.Element("domain").Attribute("id").Remove();
+            xml.Element("domain").Element("name").Value = "test-" + Guid.NewGuid();
+            xml.Element("domain").Element("uuid").Remove();
 
             // Act
-            var domain = _conn.CreateDomain(xml);
+            var domain = _conn.CreateDomain(xml.ToString());
 
             // Assert
-            Assert.Equal(2, domain.Id);
+            Assert.NotEqual(-1, domain.Id);
+        }
+
+        
+        [Fact]
+        public void TestSaveAndRestoreDomain()
+        {
+            // Arrange
+             _conn.Open();
+            var xml = XDocument.Parse(_conn.GetDomains().Single(x => x.Id == 1).Xml);
+            xml.Element("domain").Attribute("id").Remove();
+            xml.Element("domain").Element("name").Value = "test-" + Guid.NewGuid();
+            xml.Element("domain").Element("uuid").Remove();
+            var domain = _conn.CreateDomain(xml.ToString());
+            var expectedDomainUUID = domain.UUID;
+            var file = Path.GetTempFileName();
+
+            // Act
+            domain.Save(file);
+            _conn.RestoreDomain(file);
+            
+            // Assert
+            var actualDomain = _conn.GetDomains(virConnectListAllDomainsFlags.VIR_CONNECT_LIST_DOMAINS_TRANSIENT).Single(x => x.UUID == expectedDomainUUID);
+            Assert.Equal(-1, domain.Id);
+            Assert.NotEqual(-1, actualDomain.Id);
+
+            // Clean
+            File.Delete(file);
         }
 
         [Fact]

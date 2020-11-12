@@ -8,12 +8,17 @@ namespace libvirt
     /// </summary>
     public class LibvirtObject : Disposable
     {
-        protected string GetString(Func<string> func)
+        protected void EnsureObjectIsNotDisposed()
         {
             if (IsDisposed || IsDisposing)
             {
                 throw new ObjectDisposedException(this.GetType().Name);
             }
+        }
+
+        protected string GetString(Func<string> func)
+        {
+            EnsureObjectIsNotDisposed();
 
             string result = func();
 
@@ -24,11 +29,8 @@ namespace libvirt
 
         protected string GetUUID(Func<char[], int> func)
         {
-            if (IsDisposed || IsDisposing)
-            {
-                throw new ObjectDisposedException(this.GetType().Name);
-            }
-            
+            EnsureObjectIsNotDisposed();
+
             char[] uuid = new char[Libvirt.VIR_UUID_BUFLEN];
             
             var result = func(uuid);
@@ -40,10 +42,7 @@ namespace libvirt
 
         protected int GetInt32(Func<int> func)
         {
-            if (IsDisposed || IsDisposing)
-            {
-                throw new ObjectDisposedException(this.GetType().Name);
-            }
+            EnsureObjectIsNotDisposed();
 
             int result = func();
 
