@@ -12,7 +12,7 @@
     <IsPackable>True</IsPackable>
     <PackageId>libvirt-csharp</PackageId>
     <Title>libvirt-csharp</Title>
-    <Description>libvirt virtualization API</Description>
+    <Description>Access the libvirt virtualization API from C# and .NET Core</Description>
     <Authors>Alberto Falossi</Authors>
     <PackageTags>libvirt;qemu;kvm;virtualization;c#;.net</PackageTags>
     <PackageProjectUrl>https://github.com/falox/libvirt-csharp</PackageProjectUrl>
