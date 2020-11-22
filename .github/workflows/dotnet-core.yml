@@ -45,13 +45,13 @@ jobs:
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         path-to-lcov: ./tests/libvirt.Tests/TestResults/coverage.info       
-    #- name: Pack
-    #  run: dotnet pack --configuration Release --no-restore --verbosity normal
-    #- name: Upload Artifact
-    #  uses: actions/upload-artifact@v2
-    #  with:
-    #    name: nupkg
-    #    path: ./src/libvirt/bin/Release/*.nupkg
+    - name: Pack
+      run: dotnet pack --configuration Release --no-restore --verbosity normal
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: nupkg
+        path: ./src/libvirt/bin/Release/*.nupkg
 
   deploy:
     needs: build    
