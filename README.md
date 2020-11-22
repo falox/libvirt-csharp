@@ -1,4 +1,5 @@
 [![.NET Core](https://github.com/falox/libvirt-csharp/workflows/.NET%20Core/badge.svg?branch=main)](https://github.com/falox/libvirt-csharp/actions?query=workflow%3A%22.NET+Core%22)
+[![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/libvirt-csharp)](https://www.nuget.org/packages/libvirt-csharp)
 [![Coverage Status](https://coveralls.io/repos/github/falox/libvirt-csharp/badge.svg?branch=main)](https://coveralls.io/github/falox/libvirt-csharp?branch=main)
 
 # libvirt-csharp
