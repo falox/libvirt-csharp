@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 
 namespace libvirt
 {
-    public class Libvirt
+    public static class Libvirt
     {
         public const string Name = "libvirt";
 
@@ -33,6 +33,25 @@ namespace libvirt
         }
 
         public const int VIR_UUID_BUFLEN = 36;
+
+        public static Version GetVersion()
+        {
+            LibvirtHelper.ThrowExceptionOnError(virGetVersion(out ulong libVer, null, out _));
+
+            int release = (int) (libVer % 1000);
+            int minor = (int) ((libVer % 1000000) / 1000);
+            int major = (int) (libVer / 1000000);
+
+            return new Version(major, minor, release);
+
+        }
+
+        #region Library
+
+        [DllImport(Libvirt.Name, CallingConvention = CallingConvention.Cdecl, EntryPoint = "virGetVersion")]
+        public static extern int virGetVersion([Out] out ulong libVer, [In] string type, [Out] out ulong typeVer);
+
+        #endregion
 
         #region Connect
 

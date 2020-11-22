@@ -16,7 +16,7 @@ namespace libvirt
             }
         }
 
-        protected string GetString(Func<string> func)
+        protected virtual string GetString(Func<string> func)
         {
             EnsureObjectIsNotDisposed();
 
@@ -32,7 +32,7 @@ namespace libvirt
             EnsureObjectIsNotDisposed();
 
             char[] uuid = new char[Libvirt.VIR_UUID_BUFLEN];
-            
+
             var result = func(uuid);
 
             ThrowExceptionOnError(result);
@@ -51,35 +51,11 @@ namespace libvirt
             return result;
         }
 
-        protected void ThrowExceptionOnError(int result) =>  ThrowExceptionOn(() => result == -1);
+        protected void ThrowExceptionOnError(int result) => LibvirtHelper.ThrowExceptionOnError(result);
 
-        protected void ThrowExceptionOnError(IntPtr result) => ThrowExceptionOn(() => result == IntPtr.Zero);
+        protected void ThrowExceptionOnError(IntPtr result) => LibvirtHelper.ThrowExceptionOnError(result);
 
-        protected void ThrowExceptionOnError(string result) => ThrowExceptionOn(() => result == null);
+        protected void ThrowExceptionOnError(string result) => LibvirtHelper.ThrowExceptionOnError(result);
 
-        private void ThrowExceptionOn(Func<bool> predicate)
-        {
-            if (predicate())
-            {
-                var error = GetLastError();
-
-                if (error != null && error.level == virErrorLevel.VIR_ERR_ERROR)
-                {
-                    throw new LibvirtException(error);
-                }
-            }
-        }
-
-        private virError GetLastError()
-        {
-            IntPtr errPtr = Libvirt.virGetLastError();
-
-            if (errPtr == IntPtr.Zero) 
-            {
-                return null;
-            }
-
-            return (virError) Marshal.PtrToStructure(errPtr, typeof(virError));
-        }
     }
 }

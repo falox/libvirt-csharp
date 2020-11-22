@@ -19,13 +19,13 @@ namespace libvirt
 
         public string Uri { get; }
 
-        public bool IsOpen { get; set; }
+        public bool IsOpen { get; private set; }
 
         public void Open(bool readOnly = false)
         {
             if (IsDisposed)
             {
-                throw new ObjectDisposedException("Cannot open a disposed Connect");
+                throw new ObjectDisposedException(null, "Cannot open a disposed Connect.");
             }
 
             if (readOnly)
@@ -51,7 +51,7 @@ namespace libvirt
 
             int result = Libvirt.virConnectClose(_conn);
 
-            if (!ignoreErrors) 
+            if (!ignoreErrors)
             {
                 ThrowExceptionOnError(result);
             }
@@ -59,7 +59,7 @@ namespace libvirt
             IsOpen = false;
         }
 
-        public List<Domain> GetDomains(virConnectListAllDomainsFlags flags = default(virConnectListAllDomainsFlags))
+        public List<Domain> GetDomains(virConnectListAllDomainsFlags flags = default)
         {
             int result = Libvirt.virConnectListAllDomains(_conn, out IntPtr ptrDomains, flags);
 
@@ -95,7 +95,7 @@ namespace libvirt
 
         public string Type => GetString(() => Libvirt.virConnectGetType(_conn));
 
-        private new string GetString(Func<string> func)
+        protected override string GetString(Func<string> func)
         {
             if (!IsOpen)
             {
