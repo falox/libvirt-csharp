@@ -7,7 +7,11 @@ namespace libvirt.Tests
         [Fact]
         public void GetVersion_ReturnVersion()
         {
-            Libvirt.GetVersion();
+            // Act
+            var version = Libvirt.Version;
+
+            // Assert
+            Assert.True(version > new System.Version(0,0,1));
         }
     }
 }

@@ -25,7 +25,7 @@ namespace libvirt
         {
             if (IsDisposed)
             {
-                throw new ObjectDisposedException(null, "Cannot open a disposed Connect.");
+                throw new ObjectDisposedException("Connect", "Cannot open a disposed connection.");
             }
 
             if (readOnly)

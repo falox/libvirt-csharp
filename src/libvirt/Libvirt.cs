@@ -34,16 +34,18 @@ namespace libvirt
 
         public const int VIR_UUID_BUFLEN = 36;
 
-        public static Version GetVersion()
+        public static Version Version
         {
-            LibvirtHelper.ThrowExceptionOnError(virGetVersion(out ulong libVer, null, out _));
+            get
+            {
+                LibvirtHelper.ThrowExceptionOnError(virGetVersion(out ulong libVer, null, out _));
 
-            int release = (int) (libVer % 1000);
-            int minor = (int) ((libVer % 1000000) / 1000);
-            int major = (int) (libVer / 1000000);
+                int release = (int) (libVer % 1000);
+                int minor = (int) ((libVer % 1000000) / 1000);
+                int major = (int) (libVer / 1000000);
 
-            return new Version(major, minor, release);
-
+                return new Version(major, minor, release);
+            }
         }
 
         #region Library

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyName>libvirt-csharp</AssemblyName>
-    <Version>0.0.1-alpha1</Version>
+    <Version>0.0.1-alpha2</Version>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>libvirt-csharp.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
