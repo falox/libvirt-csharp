@@ -38,10 +38,9 @@ namespace libvirt.Tests
         public void TestDomainProperties()
         {
             var domain = _conn.GetDomains().SingleOrDefault(x => x.Id == 1);
-
             Assert.Equal(1, domain.Id);
             Assert.Equal("test", domain.Name);
-            Assert.Equal("6695eb01-f6a4-8304-79aa-97f2502e193f", domain.UUID);
+            Assert.Equal(Guid.Parse("6695eb01-f6a4-8304-79aa-97f2502e193f"), domain.UUID);
             Assert.Equal("linux", domain.OSType);
             Assert.Equal(virDomainState.VIR_DOMAIN_RUNNING, domain.Info.State);
             Assert.Equal(2, domain.Info.nrVirtCpu);

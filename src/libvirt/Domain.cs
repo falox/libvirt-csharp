@@ -42,13 +42,13 @@ namespace libvirt
 
         public string Name => GetString(() => Libvirt.virDomainGetName(_ptrDomain));
 
-        public string UUID => GetUUID(uuid => Libvirt.virDomainGetUUIDString(_ptrDomain, uuid));
+        public Guid UUID => GetUUID((uuid) => Libvirt.virDomainGetUUIDString(_ptrDomain, uuid));
 
         public string OSType => GetString(() => Libvirt.virDomainGetOSType(_ptrDomain));
 
         public string Xml => GetString(() => Libvirt.virDomainGetXMLDesc(_ptrDomain));
 
-        public virDomainInfo Info 
+        public virDomainInfo Info
         {
             get
             {

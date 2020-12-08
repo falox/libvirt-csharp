@@ -73,7 +73,7 @@ namespace libvirt
                 domains.Add(new Domain(_conn, ptrDomain));
             }
 
-            Marshal.FreeHGlobal(ptrDomains);
+            Libvirt.virFree(ptrDomains);
 
             return domains;
         }

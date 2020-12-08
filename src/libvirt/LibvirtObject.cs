@@ -27,17 +27,27 @@ namespace libvirt
             return result;
         }
 
-        protected string GetUUID(Func<char[], int> func)
+        protected Guid GetUUID(Func<IntPtr, int> func)
         {
             EnsureObjectIsNotDisposed();
 
-            char[] uuid = new char[Libvirt.VIR_UUID_BUFLEN];
+            //Can not directly cast for different endian.
 
-            var result = func(uuid);
+            IntPtr uuidStringBuffer = Marshal.AllocHGlobal(Libvirt.VIR_UUID_STRING_BUFLEN);
 
+            int result = func(uuidStringBuffer);
             ThrowExceptionOnError(result);
 
-            return new string(uuid);
+            string uuidString = Marshal.PtrToStringUTF8(uuidStringBuffer);
+
+            Marshal.FreeHGlobal(uuidStringBuffer);
+
+            if (uuidString is null)
+            {
+                return default;
+            }
+
+            return Guid.Parse(uuidString);
         }
 
         protected int GetInt32(Func<int> func)
